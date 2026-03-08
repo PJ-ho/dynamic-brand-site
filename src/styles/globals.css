@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand Colors - Warm Leather Tones */
+  /* Brand Colors - Warm Leather Tones (Light Theme) */
   --color-cream: #F5F0E8;
   --color-tan: #C4A77D;
   --color-leather: #8B6914;
@@ -13,6 +13,18 @@
   /* Typography */
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Inter', -apple-system, sans-serif;
+}
+
+[data-theme="dark"] {
+  /* Brand Colors - Warm Leather Tones (Dark Theme) */
+  /* Inverted palette: cream ↔ espresso for primary contrast */
+  --color-cream: #2A1810; /* Dark espresso-inspired background */
+  --color-tan: #8B7355; /* Muted tan for dark mode */
+  --color-leather: #D4A84B; /* Brighter gold for visibility */
+  --color-brown: #A0826D; /* Lighter brown */
+  --color-espresso: #F5F0E8; /* Light cream for text */
+  --color-charcoal: #E8E8E8; /* Light charcoal */
+  --color-gold: #DAA520; /* Brighter gold accent */
 }
 
 @theme inline {
