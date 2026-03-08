@@ -23,15 +23,17 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   useEffect(() => {
     setMounted(true);
     
-    // Check localStorage first
-    const savedTheme = localStorage.getItem('theme') as Theme | null;
-    if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-      setTheme(savedTheme);
-      return;
+    // Check localStorage first (client-side only)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const savedTheme = localStorage.getItem('theme') as Theme | null;
+      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+        setTheme(savedTheme);
+        return;
+      }
     }
 
     // Fall back to system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setTheme('dark');
     }
   }, []);
@@ -40,21 +42,25 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   useEffect(() => {
     if (mounted) {
       document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('theme', theme);
+      }
     }
   }, [theme, mounted]);
 
   // Listen for system theme changes
   useEffect(() => {
-    if (!window.matchMedia) return;
+    if (typeof window === 'undefined' || !window.matchMedia) return;
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     
     const handleChange = (e: MediaQueryListEvent) => {
       // Only update if user hasn't manually set a preference
-      const savedTheme = localStorage.getItem('theme');
-      if (!savedTheme) {
-        setTheme(e.matches ? 'dark' : 'light');
+      if (window.localStorage) {
+        const savedTheme = localStorage.getItem('theme');
+        if (!savedTheme) {
+          setTheme(e.matches ? 'dark' : 'light');
+        }
       }
     };
 
