@@ -16,8 +16,9 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setThemeState] = useState<Theme>('light');
   const [mounted, setMounted] = useState(false);
+  const [isManualPreference, setIsManualPreference] = useState(false);
 
   // Initialize theme from localStorage or system preference
   useEffect(() => {
@@ -27,14 +28,15 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     if (typeof window !== 'undefined' && window.localStorage) {
       const savedTheme = localStorage.getItem('theme') as Theme | null;
       if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-        setTheme(savedTheme);
+        setThemeState(savedTheme);
+        setIsManualPreference(true);
         return;
       }
     }
 
     // Fall back to system preference
     if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
+      setThemeState('dark');
     }
   }, []);
 
@@ -42,11 +44,12 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   useEffect(() => {
     if (mounted) {
       document.documentElement.setAttribute('data-theme', theme);
-      if (typeof window !== 'undefined' && window.localStorage) {
+      // Only save to localStorage if user manually set the preference
+      if (isManualPreference && typeof window !== 'undefined' && window.localStorage) {
         localStorage.setItem('theme', theme);
       }
     }
-  }, [theme, mounted]);
+  }, [theme, mounted, isManualPreference]);
 
   // Listen for system theme changes
   useEffect(() => {
@@ -56,17 +59,20 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     
     const handleChange = (e: MediaQueryListEvent) => {
       // Only update if user hasn't manually set a preference
-      if (window.localStorage) {
-        const savedTheme = localStorage.getItem('theme');
-        if (!savedTheme) {
-          setTheme(e.matches ? 'dark' : 'light');
-        }
+      if (!isManualPreference) {
+        setThemeState(e.matches ? 'dark' : 'light');
       }
     };
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  }, [isManualPreference]);
+
+  // Wrapper for setTheme that marks it as a manual preference
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+    setIsManualPreference(true);
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
