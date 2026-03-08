@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "../styles/globals.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 const playfair = Playfair_Display({
   variable: "--font-serif",
@@ -36,9 +37,11 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="scroll-smooth">
       <body className={`${playfair.variable} ${inter.variable}`}>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <ThemeProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
