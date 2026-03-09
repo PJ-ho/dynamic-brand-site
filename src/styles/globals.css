@@ -119,6 +119,47 @@ button, [role="button"] {
               border-color var(--theme-transition-duration) var(--theme-transition-timing);
 }
 
+/* Focus states */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-tan);
+  outline-offset: 2px;
+}
+
+/* Dark theme focus states */
+[data-theme="dark"] *:focus-visible {
+  outline-color: var(--color-gold);
+}
+
+/* Input focus states */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-tan);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+  border-color: var(--color-gold);
+}
+
+/* Button focus states */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-tan);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] button:focus-visible,
+[data-theme="dark"] [role="button"]:focus-visible {
+  outline-color: var(--color-gold);
+}
+
 /* Smooth text rendering */
 * {
   -webkit-font-smoothing: antialiased;
@@ -129,6 +170,12 @@ button, [role="button"] {
 ::selection {
   background: var(--color-tan);
   color: var(--color-cream);
+}
+
+/* Dark theme selection */
+[data-theme="dark"] ::selection {
+  background: var(--color-gold);
+  color: var(--color-espresso);
 }
 
 /* Page transitions */
