@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Playfair_Display, Inter } from "next/font/google";
 import "../styles/globals.css";
 import Navbar from "@/components/ui/Navbar";
@@ -36,6 +37,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className="scroll-smooth">
+      <head>
+        <Script
+          id="theme-flash-prevention"
+          strategy="beforeInteractive"
+        >
+          {`
+            (function() {
+              try {
+                var theme = null;
+                var stored = localStorage.getItem('theme');
+                if (stored === 'light' || stored === 'dark') {
+                  theme = stored;
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                  theme = 'dark';
+                }
+                if (theme) {
+                  document.documentElement.setAttribute('data-theme', theme);
+                }
+              } catch (e) {}
+            })();
+          `}
+        </Script>
+      </head>
       <body className={`${playfair.variable} ${inter.variable}`}>
         <ThemeProvider>
           <Navbar />
