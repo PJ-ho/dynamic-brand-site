@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand Colors - Warm Leather Tones */
+  /* Brand Colors - Warm Leather Tones (Light Theme) */
   --color-cream: #F5F0E8;
   --color-tan: #C4A77D;
   --color-leather: #8B6914;
@@ -13,6 +13,22 @@
   /* Typography */
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Inter', -apple-system, sans-serif;
+  
+  /* Theme Transitions */
+  --theme-transition-duration: 0.3s;
+  --theme-transition-timing: ease;
+}
+
+[data-theme="dark"] {
+  /* Brand Colors - Warm Leather Tones (Dark Theme) */
+  /* Inverted palette: cream ↔ espresso for primary contrast */
+  --color-cream: #2A1810; /* Dark espresso-inspired background */
+  --color-tan: #8B7355; /* Muted tan for dark mode */
+  --color-leather: #D4A84B; /* Brighter gold for visibility */
+  --color-brown: #A0826D; /* Lighter brown */
+  --color-espresso: #F5F0E8; /* Light cream for text */
+  --color-charcoal: #E8E8E8; /* Light charcoal */
+  --color-gold: #DAA520; /* Brighter gold accent */
 }
 
 @theme inline {
@@ -41,6 +57,8 @@ body {
   color: var(--color-espresso);
   overflow-x: hidden;
   line-height: 1.6;
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-timing),
+              color var(--theme-transition-duration) var(--theme-transition-timing);
 }
 
 /* Custom scrollbar */
@@ -50,15 +68,35 @@ body {
 
 ::-webkit-scrollbar-track {
   background: var(--color-cream);
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-timing);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-tan);
   border-radius: 4px;
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-timing);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-leather);
+}
+
+/* Dark theme scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 8px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--color-tan);
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
 }
 
 /* Typography */
@@ -66,6 +104,60 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
   font-weight: 400;
   letter-spacing: 0.02em;
+  transition: color var(--theme-transition-duration) var(--theme-transition-timing);
+}
+
+p, a {
+  transition: color var(--theme-transition-duration) var(--theme-transition-timing),
+              background-color var(--theme-transition-duration) var(--theme-transition-timing);
+}
+
+/* Buttons */
+button, [role="button"] {
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-timing),
+              color var(--theme-transition-duration) var(--theme-transition-timing),
+              border-color var(--theme-transition-duration) var(--theme-transition-timing);
+}
+
+/* Focus states */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-tan);
+  outline-offset: 2px;
+}
+
+/* Dark theme focus states */
+[data-theme="dark"] *:focus-visible {
+  outline-color: var(--color-gold);
+}
+
+/* Input focus states */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-tan);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+  border-color: var(--color-gold);
+}
+
+/* Button focus states */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-tan);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] button:focus-visible,
+[data-theme="dark"] [role="button"]:focus-visible {
+  outline-color: var(--color-gold);
 }
 
 /* Smooth text rendering */
@@ -80,6 +172,12 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-cream);
 }
 
+/* Dark theme selection */
+[data-theme="dark"] ::selection {
+  background: var(--color-gold);
+  color: var(--color-espresso);
+}
+
 /* Page transitions */
 .page-transition {
   position: fixed;
@@ -87,6 +185,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--color-espresso);
   z-index: 9999;
   transform: translateY(100%);
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-timing);
 }
 
 /* Canvas container */
@@ -102,6 +201,13 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(196, 167, 125, 0.2);
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-timing),
+              border-color var(--theme-transition-duration) var(--theme-transition-timing);
+}
+
+[data-theme="dark"] .glass {
+  background: rgba(42, 24, 16, 0.8);
+  border: 1px solid rgba(139, 115, 85, 0.3);
 }
 
 /* Leather texture overlay */

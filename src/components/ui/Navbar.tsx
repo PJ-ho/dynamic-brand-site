@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
   { href: '/', label: '首页' },
@@ -68,6 +69,7 @@ export default function Navbar() {
                 </Link>
               </motion.div>
             ))}
+            <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}
@@ -123,6 +125,14 @@ export default function Navbar() {
                   </Link>
                 </motion.div>
               ))}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 * navLinks.length }}
+                className="pt-2"
+              >
+                <ThemeToggle />
+              </motion.div>
             </div>
           </motion.div>
         )}
